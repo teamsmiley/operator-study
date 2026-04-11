@@ -24,15 +24,18 @@ import (
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // SimpleAppSpec defines the desired state of SimpleApp
+// 사용자가 원하는 상태를 선언하는 부분
 type SimpleAppSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-	// The following markers will use OpenAPI v3 schema to validate the value
-	// More info: https://book.kubebuilder.io/reference/markers/crd-validation.html
+	// 컨테이너 이미지 (예: nginx:1.25)
+	// +kubebuilder:validation:Required
+	Image string `json:"image"`
 
-	// foo is an example field of SimpleApp. Edit simpleapp_types.go to remove/update
+	// 실행할 Pod 수
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Maximum=10
+	// +kubebuilder:default=1
 	// +optional
-	Foo *string `json:"foo,omitempty"`
+	Replicas *int32 `json:"replicas,omitempty"`
 }
 
 // SimpleAppStatus defines the observed state of SimpleApp.

@@ -58,8 +58,13 @@ kubebuilder version
 # 클러스터 생성 (이름: operator-lab)
 k3d cluster create operator-lab
 
-# kubectl context가 자동으로 설정된다. 확인:
-kubectl cluster-info
+# KUBECONFIG에 여러 파일이 설정된 경우 context가 자동 등록 안 될 수 있다.
+# 그 경우 kubeconfig를 ~/.kube/에 직접 복사하고 KUBECONFIG에 추가한다:
+#   k3d kubeconfig merge operator-lab -o ~/.kube/k3d-operator-lab.yaml
+#   export KUBECONFIG="$KUBECONFIG:$HOME/.kube/k3d-operator-lab.yaml"
+
+# context 전환 및 확인:
+kubectl config use-context k3d-operator-lab
 kubectl get nodes
 ```
 

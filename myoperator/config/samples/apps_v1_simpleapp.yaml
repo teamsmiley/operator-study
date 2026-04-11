@@ -1,9 +1,8 @@
 apiVersion: apps.example.com/v1
 kind: SimpleApp
 metadata:
-  labels:
-    app.kubernetes.io/name: myoperator
-    app.kubernetes.io/managed-by: kustomize
-  name: simpleapp-sample
+  name: my-app
+  namespace: default
 spec:
-  # TODO(user): Add fields here
+  image: nginx:1.25
+  replicas: 2
