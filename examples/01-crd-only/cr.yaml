@@ -1,0 +1,9 @@
+# CR: "초코파이 간식을 30개 만들어줘"라는 신청서
+apiVersion: school.example.com/v1
+kind: Snack
+metadata:
+  name: afternoon-snack
+  namespace: default
+spec:
+  menu: chocopie
+  quantity: 30
