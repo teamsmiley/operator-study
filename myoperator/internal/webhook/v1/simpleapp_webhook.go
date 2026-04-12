@@ -18,6 +18,7 @@ package v1
 
 import (
 	"context"
+	"strings"
 
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -49,11 +50,14 @@ type SimpleAppCustomDefaulter struct {
 	// TODO(user): Add more fields as needed for defaulting
 }
 
-// Default implements webhook.CustomDefaulter so a webhook will be registered for the Kind SimpleApp.
+// Default -- Mutating Webhook. CR이 저장되기 전에 기본값을 자동으로 채운다.
 func (d *SimpleAppCustomDefaulter) Default(_ context.Context, obj *appsv1.SimpleApp) error {
 	simpleapplog.Info("Defaulting for SimpleApp", "name", obj.GetName())
 
-	// TODO(user): fill in your defaulting logic.
+	// image에 태그가 없으면 :latest 추가
+	if !strings.Contains(obj.Spec.Image, ":") {
+		obj.Spec.Image = obj.Spec.Image + ":latest"
+	}
 
 	return nil
 }
