@@ -27,10 +27,14 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
 	myappsv1 "github.com/teamsmiley/myoperator/api/v1"
 )
+
+// Finalizer 이름 -- 도메인/용도 형식이 관례
+const simpleAppFinalizer = "apps.example.com/finalizer"
 
 // SimpleAppReconciler reconciles a SimpleApp object
 type SimpleAppReconciler struct {
@@ -52,15 +56,37 @@ func (r *SimpleAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	var app myappsv1.SimpleApp
 	if err := r.Get(ctx, req.NamespacedName, &app); err != nil {
 		if errors.IsNotFound(err) {
-			// CR이 삭제된 경우 -- 아무것도 안 한다
-			// (Deployment는 OwnerReference 덕분에 자동 삭제된다)
 			log.Info("SimpleApp 리소스가 삭제됨, 무시")
 			return ctrl.Result{}, nil
 		}
 		return ctrl.Result{}, err
 	}
 
-	// 2. 이 SimpleApp에 대응하는 Deployment가 이미 있는지 확인한다
+	// 2. Finalizer 처리 -- 삭제 요청이 들어왔는지 확인한다
+	if !app.DeletionTimestamp.IsZero() {
+		// 삭제가 요청됨 (deletionTimestamp가 찍힘)
+		if controllerutil.ContainsFinalizer(&app, simpleAppFinalizer) {
+			// 정리 작업 실행 (실제로는 외부 리소스 정리 등을 여기서 한다)
+			log.Info("Finalizer 정리 작업 실행", "name", app.Name)
+
+			// Finalizer 제거 → Kubernetes가 진짜 삭제를 진행한다
+			controllerutil.RemoveFinalizer(&app, simpleAppFinalizer)
+			if err := r.Update(ctx, &app); err != nil {
+				return ctrl.Result{}, err
+			}
+		}
+		return ctrl.Result{}, nil
+	}
+
+	// Finalizer가 아직 없으면 추가한다 (최초 생성 시)
+	if !controllerutil.ContainsFinalizer(&app, simpleAppFinalizer) {
+		controllerutil.AddFinalizer(&app, simpleAppFinalizer)
+		if err := r.Update(ctx, &app); err != nil {
+			return ctrl.Result{}, err
+		}
+	}
+
+	// 3. 이 SimpleApp에 대응하는 Deployment가 이미 있는지 확인한다
 	var deploy appsv1.Deployment
 	err := r.Get(ctx, req.NamespacedName, &deploy)
 
