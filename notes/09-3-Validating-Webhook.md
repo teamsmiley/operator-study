@@ -17,12 +17,12 @@ Mutating Webhook 이후에 실행된다.
 
 ## 언제 쓰나?
 
-| 용도 | 예시 |
-| ---- | ---- |
-| 필드 값 검증 | image에 태그가 반드시 포함되어야 한다 |
-| 필드 간 비교 | replicas를 한 번에 50% 이상 줄이지 못한다 |
-| 삭제 방지 | 특정 라벨이 있는 CR은 삭제할 수 없다 |
-| 외부 참조 검증 | 지정된 registry 허용 목록에 있는지 확인 |
+| 용도           | 예시                                      |
+| -------------- | ----------------------------------------- |
+| 필드 값 검증   | image에 태그가 반드시 포함되어야 한다     |
+| 필드 간 비교   | replicas를 한 번에 50% 이상 줄이지 못한다 |
+| 삭제 방지      | 특정 라벨이 있는 CR은 삭제할 수 없다      |
+| 외부 참조 검증 | 지정된 registry 허용 목록에 있는지 확인   |
 
 ## scaffold 생성
 
@@ -36,11 +36,11 @@ kubebuilder create webhook --group apps --version v1 --kind SimpleApp --programm
 
 ## 생성되는 함수 3개
 
-| 함수 | 호출 시점 | 역할 |
-| ---- | --------- | ---- |
-| `ValidateCreate()` | CR 생성 시 | 생성 요청 검증 |
+| 함수               | 호출 시점  | 역할                                       |
+| ------------------ | ---------- | ------------------------------------------ |
+| `ValidateCreate()` | CR 생성 시 | 생성 요청 검증                             |
 | `ValidateUpdate()` | CR 수정 시 | 수정 요청 검증 (이전 값과 새 값 비교 가능) |
-| `ValidateDelete()` | CR 삭제 시 | 삭제 요청 검증 |
+| `ValidateDelete()` | CR 삭제 시 | 삭제 요청 검증                             |
 
 ValidateUpdate는 `oldObj`와 `newObj` 두 개를 받아서 이전 값과 새 값을 비교할 수 있다.
 이것이 CRD validation marker로는 불가능하고 Webhook만 할 수 있는 핵심 기능이다.
@@ -60,9 +60,11 @@ scaffold 커밋: `f1b171b`
 ## 구현 예정 로직
 
 ValidateCreate, ValidateUpdate:
+
 - image에 태그가 포함되어야 한다 (`nginx` NG, `nginx:1.25` OK)
 
 ValidateDelete:
+
 - 별도 검증 없음 (삭제 허용)
 
 ## 다음 단계
