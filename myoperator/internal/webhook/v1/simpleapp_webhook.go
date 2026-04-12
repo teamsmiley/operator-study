@@ -18,14 +18,14 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 
 	appsv1 "github.com/teamsmiley/myoperator/api/v1"
-
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // nolint:unused
@@ -78,20 +78,26 @@ type SimpleAppCustomValidator struct {
 	// TODO(user): Add more fields as needed for validation
 }
 
-// ValidateCreate implements webhook.CustomValidator so a webhook will be registered for the type SimpleApp.
+// ValidateCreate -- Validating Webhook. CR 생성 시 규칙에 맞는지 검증한다.
 func (v *SimpleAppCustomValidator) ValidateCreate(_ context.Context, obj *appsv1.SimpleApp) (admission.Warnings, error) {
 	simpleapplog.Info("Validation for SimpleApp upon creation", "name", obj.GetName())
 
-	// TODO(user): fill in your validation logic upon object creation.
+	// image에 태그가 포함되어야 한다
+	if !strings.Contains(obj.Spec.Image, ":") {
+		return nil, fmt.Errorf("image에 태그가 필요합니다 (예: nginx:1.25), 입력값: %s", obj.Spec.Image)
+	}
 
 	return nil, nil
 }
 
-// ValidateUpdate implements webhook.CustomValidator so a webhook will be registered for the type SimpleApp.
+// ValidateUpdate -- Validating Webhook. CR 수정 시 규칙에 맞는지 검증한다.
 func (v *SimpleAppCustomValidator) ValidateUpdate(_ context.Context, oldObj, newObj *appsv1.SimpleApp) (admission.Warnings, error) {
 	simpleapplog.Info("Validation for SimpleApp upon update", "name", newObj.GetName())
 
-	// TODO(user): fill in your validation logic upon object update.
+	// image에 태그가 포함되어야 한다
+	if !strings.Contains(newObj.Spec.Image, ":") {
+		return nil, fmt.Errorf("image에 태그가 필요합니다 (예: nginx:1.25), 입력값: %s", newObj.Spec.Image)
+	}
 
 	return nil, nil
 }
