@@ -45,6 +45,18 @@ kubebuilder create webhook --group apps --version v1 --kind SimpleApp --programm
 ValidateUpdate는 `oldObj`와 `newObj` 두 개를 받아서 이전 값과 새 값을 비교할 수 있다.
 이것이 CRD validation marker로는 불가능하고 Webhook만 할 수 있는 핵심 기능이다.
 
+## scaffold 실행 결과
+
+scaffold 커밋: `f1b171b`
+
+기존 `simpleapp_webhook.go`에 추가된 코드:
+
+- `SimpleAppCustomValidator` 구조체
+- `ValidateCreate()` 함수 (TODO)
+- `ValidateUpdate()` 함수 (TODO)
+- `ValidateDelete()` 함수 (TODO)
+- `SetupSimpleAppWebhookWithManager()`에 `.WithValidator()` 자동 추가
+
 ## 구현 예정 로직
 
 ValidateCreate, ValidateUpdate:
