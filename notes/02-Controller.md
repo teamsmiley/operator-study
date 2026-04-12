@@ -148,7 +148,7 @@ Controller <-- {"type":"DELETED","object":{...}}     (같은 연결로 전송)
 kubectl get snack --watch
 
 # 터미널 2: snack을 만들거나 삭제하면 터미널 1에 실시간으로 출력됨
-kubectl apply -f examples/01-crd-only/cr.yaml
+kubectl apply -f examples/cr.yaml
 kubectl delete snack afternoon-snack
 ```
 

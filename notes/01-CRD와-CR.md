@@ -28,7 +28,7 @@ CR  = "초코파이 30개를 신청합니다" (실제 신청서)
 
 ## 실습 파일
 
-`examples/01-crd-only/` 폴더에 2개 파일이 있다. kubebuilder 없이 직접 작성한 것이다.
+`examples/` 폴더에 2개 파일이 있다. kubebuilder 없이 직접 작성한 것이다.
 
 ### crd.yaml -- 종류 등록 (설계도)
 
@@ -81,7 +81,7 @@ spec:
 ### 1단계: CRD 없이 CR 먼저 apply (실패)
 
 ```bash
-kubectl apply -f examples/01-crd-only/cr.yaml
+kubectl apply -f examples/cr.yaml
 ```
 
 결과:
@@ -97,7 +97,7 @@ Kubernetes가 "Snack? 그런 리소스는 모른다"고 거부한다.
 ### 2단계: CRD 등록
 
 ```bash
-kubectl apply -f examples/01-crd-only/crd.yaml
+kubectl apply -f examples/crd.yaml
 ```
 
 결과:
@@ -111,7 +111,7 @@ customresourcedefinition.apiextensions.k8s.io/snacks.school.example.com created
 ### 3단계: CR 다시 apply (성공)
 
 ```bash
-kubectl apply -f examples/01-crd-only/cr.yaml
+kubectl apply -f examples/cr.yaml
 ```
 
 결과:
