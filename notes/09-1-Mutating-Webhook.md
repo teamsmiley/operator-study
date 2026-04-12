@@ -62,8 +62,16 @@ Controller Pod (하나의 프로세스)
 kubebuilder로 webhook scaffold를 생성한다:
 
 ```bash
-kubebuilder create webhook --group apps.example.com --version v1 --kind SimpleApp --defaulting
+# Mutating만
+kubebuilder create webhook --group apps --version v1 --kind SimpleApp --defaulting
+
+# Mutating + Validating 둘 다
+kubebuilder create webhook --group apps --version v1 --kind SimpleApp --defaulting --programmatic-validation
 ```
+
+주의: `--group`에는 domain을 빼고 group 부분만 넣는다.
+PROJECT 파일에 `domain: example.com`이 별도로 정의되어 있기 때문이다.
+(`apps.example.com`이 아니라 `apps`)
 
 `--defaulting` 플래그가 Mutating Webhook을 만든다.
 
