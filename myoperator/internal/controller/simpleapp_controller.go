@@ -22,6 +22,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -103,6 +104,40 @@ func (r *SimpleAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		if err := r.Update(ctx, &deploy); err != nil {
 			return ctrl.Result{}, err
 		}
+	}
+
+	// 4. Status 업데이트 -- Deployment의 실제 상태를 SimpleApp CR에 기록한다
+	if deploy.Status.AvailableReplicas == replicas {
+		// 원하는 수만큼 Pod가 준비됨 → Available
+		meta.SetStatusCondition(&app.Status.Conditions, metav1.Condition{
+			Type:               "Available",
+			Status:             metav1.ConditionTrue,
+			Reason:             "DeploymentReady",
+			Message:            "모든 Pod가 정상 동작 중",
+			ObservedGeneration: app.Generation,
+		})
+		meta.RemoveStatusCondition(&app.Status.Conditions, "Progressing")
+	} else {
+		// 아직 Pod가 준비되지 않음 → Progressing
+		meta.SetStatusCondition(&app.Status.Conditions, metav1.Condition{
+			Type:               "Progressing",
+			Status:             metav1.ConditionTrue,
+			Reason:             "DeploymentUpdating",
+			Message:            "Pod 배포 진행 중",
+			ObservedGeneration: app.Generation,
+		})
+		meta.SetStatusCondition(&app.Status.Conditions, metav1.Condition{
+			Type:               "Available",
+			Status:             metav1.ConditionFalse,
+			Reason:             "DeploymentUpdating",
+			Message:            "Pod 배포 진행 중",
+			ObservedGeneration: app.Generation,
+		})
+	}
+
+	// Status subresource를 통해 업데이트 (.../simpleapps/my-app/status 경로)
+	if err := r.Status().Update(ctx, &app); err != nil {
+		return ctrl.Result{}, err
 	}
 
 	return ctrl.Result{}, nil
