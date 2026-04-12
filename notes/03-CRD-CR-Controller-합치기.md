@@ -173,9 +173,14 @@ func (r *SimpleAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
     }
 
     // 2b. 있으면 -> 비교하고, 바뀌었으면 업데이트
+    replicas := int32(1)
+    if app.Spec.Replicas != nil {
+        replicas = *app.Spec.Replicas
+    }
+
     needsUpdate := false
-    if *deploy.Spec.Replicas != *app.Spec.Replicas {
-        deploy.Spec.Replicas = app.Spec.Replicas
+    if *deploy.Spec.Replicas != replicas {
+        deploy.Spec.Replicas = &replicas
         needsUpdate = true
     }
     if deploy.Spec.Template.Spec.Containers[0].Image != app.Spec.Image {
