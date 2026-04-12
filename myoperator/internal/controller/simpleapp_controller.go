@@ -66,7 +66,8 @@ func (r *SimpleAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	if !app.DeletionTimestamp.IsZero() {
 		// 삭제가 요청됨 (deletionTimestamp가 찍힘)
 		if controllerutil.ContainsFinalizer(&app, simpleAppFinalizer) {
-			// 정리 작업 실행 (실제로는 외부 리소스 정리 등을 여기서 한다)
+			// 정리 작업 실행 (실제 Operator에서는 여기서 외부 리소스를 정리한다)
+			// 예: AWS S3 버킷 삭제, DNS 레코드 정리, 외부 API 호출 등
 			log.Info("Finalizer 정리 작업 실행", "name", app.Name)
 
 			// Finalizer 제거 → Kubernetes가 진짜 삭제를 진행한다
