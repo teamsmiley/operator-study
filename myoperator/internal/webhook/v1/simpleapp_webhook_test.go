@@ -48,39 +48,49 @@ var _ = Describe("SimpleApp Webhook", func() {
 	})
 
 	Context("When creating SimpleApp under Defaulting Webhook", func() {
-		// TODO (user): Add logic for defaulting webhooks
-		// Example:
-		// It("Should apply defaults when a required field is empty", func() {
-		//     By("simulating a scenario where defaults should be applied")
-		//     obj.SomeFieldWithDefault = ""
-		//     By("calling the Default method to apply defaults")
-		//     defaulter.Default(ctx, obj)
-		//     By("checking that the default values are set")
-		//     Expect(obj.SomeFieldWithDefault).To(Equal("default_value"))
-		// })
+		It("태그 없는 image에 :latest를 추가해야 한다", func() {
+			obj.Spec.Image = "nginx"
+			err := defaulter.Default(ctx, obj)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(obj.Spec.Image).To(Equal("nginx:latest"))
+		})
+
+		It("태그가 있는 image는 그대로 유지해야 한다", func() {
+			obj.Spec.Image = "nginx:1.25"
+			err := defaulter.Default(ctx, obj)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(obj.Spec.Image).To(Equal("nginx:1.25"))
+		})
 	})
 
-	Context("When creating or updating SimpleApp under Validating Webhook", func() {
-		// TODO (user): Add logic for validating webhooks
-		// Example:
-		// It("Should deny creation if a required field is missing", func() {
-		//     By("simulating an invalid creation scenario")
-		//     obj.SomeRequiredField = ""
-		//     Expect(validator.ValidateCreate(ctx, obj)).Error().To(HaveOccurred())
-		// })
-		//
-		// It("Should admit creation if all required fields are present", func() {
-		//     By("simulating an invalid creation scenario")
-		//     obj.SomeRequiredField = "valid_value"
-		//     Expect(validator.ValidateCreate(ctx, obj)).To(BeNil())
-		// })
-		//
-		// It("Should validate updates correctly", func() {
-		//     By("simulating a valid update scenario")
-		//     oldObj.SomeRequiredField = "updated_value"
-		//     obj.SomeRequiredField = "updated_value"
-		//     Expect(validator.ValidateUpdate(ctx, oldObj, obj)).To(BeNil())
-		// })
+	Context("When creating SimpleApp under Validating Webhook", func() {
+		It("태그가 있는 image는 생성을 허용해야 한다", func() {
+			obj.Spec.Image = "nginx:1.25"
+			_, err := validator.ValidateCreate(ctx, obj)
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("태그가 없는 image는 생성을 거부해야 한다", func() {
+			obj.Spec.Image = "nginx"
+			_, err := validator.ValidateCreate(ctx, obj)
+			Expect(err).To(HaveOccurred())
+		})
+	})
+
+	Context("When updating SimpleApp under Validating Webhook", func() {
+		It("태그가 있는 image로 수정은 허용해야 한다", func() {
+			oldObj.Spec.Image = "nginx:1.24"
+			obj.Spec.Image = "nginx:1.25"
+			_, err := validator.ValidateUpdate(ctx, oldObj, obj)
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("태그가 없는 image로 수정은 거부해야 한다", func() {
+			oldObj.Spec.Image = "nginx:1.24"
+			obj.Spec.Image = "nginx"
+			_, err := validator.ValidateUpdate(ctx, oldObj, obj)
+			Expect(err).To(HaveOccurred())
+		})
 	})
 
 })
