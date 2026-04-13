@@ -54,12 +54,12 @@ var _ = Describe("Manager", Ordered, func() {
 	BeforeAll(func() {
 		By("creating manager namespace")
 		cmd := exec.Command("kubectl", "create", "ns", namespace)
-		_, err := utils.Run(cmd)
-		Expect(err).NotTo(HaveOccurred(), "Failed to create namespace")
+		_, _ = utils.Run(cmd) // 이미 존재하면 무시
 
 		By("labeling the namespace to enforce the restricted security policy")
 		cmd = exec.Command("kubectl", "label", "--overwrite", "ns", namespace,
 			"pod-security.kubernetes.io/enforce=restricted")
+		var err error
 		_, err = utils.Run(cmd)
 		Expect(err).NotTo(HaveOccurred(), "Failed to label namespace with restricted policy")
 
