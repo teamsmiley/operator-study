@@ -5,12 +5,12 @@ Kubernetes Operator 패턴과 Custom Controller를 체계적으로 학습하기 
 
 ## 학습 로드맵
 
-| Phase | 주제 | 노트 |
-|-------|------|------|
-| **1. 환경 구성 + 기초** | 도구 설치, k3d 클러스터, CRD/CR, Controller | 00 ~ 02 |
-| **2. 첫 Operator** | kubebuilder 프로젝트 생성, 빌드 및 배포 | 03 ~ 04 |
-| **3. 심화** | RBAC, Status, Owner Reference, Finalizer, Webhook, 에러 핸들링 | 05 ~ 11 |
-| **4. 운영** | 모니터링/로깅, 테스트 전략 | 12 ~ 13 |
+| Phase                   | 주제                                                           | 노트    |
+| ----------------------- | -------------------------------------------------------------- | ------- |
+| **1. 환경 구성 + 기초** | 도구 설치, k3d 클러스터, CRD/CR, Controller                    | 00 ~ 02 |
+| **2. 첫 Operator**      | kubebuilder 프로젝트 생성, 빌드 및 배포                        | 03 ~ 04 |
+| **3. 심화**             | RBAC, Status, Owner Reference, Finalizer, Webhook, 에러 핸들링 | 05 ~ 11 |
+| **4. 운영**             | 모니터링/로깅, 테스트 전략                                     | 12 ~ 13 |
 
 ## 디렉토리 구조
 
