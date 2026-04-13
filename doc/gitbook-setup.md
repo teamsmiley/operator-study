@@ -16,11 +16,11 @@ Docs site: K8S Operator (1개)
 
 ### 최종 URL
 
-| 언어 | URL |
-|------|-----|
-| 한국어 (기본) | `https://teamsmiley.gitbook.io/k8s-operator/` |
-| 한국어 | `https://teamsmiley.gitbook.io/k8s-operator/ko` |
-| 영어 | `https://teamsmiley.gitbook.io/k8s-operator/en` |
+| 언어          | URL                                             |
+| ------------- | ----------------------------------------------- |
+| 한국어 (기본) | `https://teamsmiley.gitbook.io/k8s-operator/`   |
+| 한국어        | `https://teamsmiley.gitbook.io/k8s-operator/ko` |
+| 영어          | `https://teamsmiley.gitbook.io/k8s-operator/en` |
 
 ---
 
@@ -86,13 +86,13 @@ git push
 ```markdown
 # Table of contents
 
-* [K8S Operator](Readme.md)
+- [K8S Operator](Readme.md)
 
 ## Phase 1: 환경 구성 + 기초 개념
 
-* [환경 설정 (Go, Docker, k3d, kubebuilder)](notes/00-environment-setup.md)
-* [CRD와 CR](notes/01-CRD와-CR.md)
-...
+- [환경 설정 (Go, Docker, k3d, kubebuilder)](notes/00-environment-setup.md)
+- [CRD와 CR](notes/01-CRD와-CR.md)
+  ...
 ```
 
 `en/SUMMARY.md` 예시:
@@ -100,13 +100,13 @@ git push
 ```markdown
 # Table of contents
 
-* [K8S Operator](Readme.md)
+- [K8S Operator](Readme.md)
 
 ## Phase 1: Environment Setup + Basics
 
-* [Environment Setup (Go, Docker, k3d, kubebuilder)](notes/00-environment-setup.md)
-* [CRD and CR](notes/01-crd-and-cr.md)
-...
+- [Environment Setup (Go, Docker, k3d, kubebuilder)](notes/00-environment-setup.md)
+- [CRD and CR](notes/01-crd-and-cr.md)
+  ...
 ```
 
 ---
@@ -131,10 +131,10 @@ SUMMARY.md를 추가하면 사이드바가 정리된다:
 
 GitBook에는 **Space**와 **Docs site** 두 개념이 있다.
 
-| 개념 | 역할 | 비유 |
-|------|------|------|
-| Space | 실제 문서가 들어있는 곳 (Git repo 연결) | 원고 |
-| Docs site | Space를 공개 URL로 발행하는 곳 | 출판된 책 |
+| 개념      | 역할                                    | 비유      |
+| --------- | --------------------------------------- | --------- |
+| Space     | 실제 문서가 들어있는 곳 (Git repo 연결) | 원고      |
+| Docs site | Space를 공개 URL로 발행하는 곳          | 출판된 책 |
 
 왼쪽 메뉴에서 확인할 수 있다:
 
@@ -191,11 +191,11 @@ Docs site 설정 > Structure에서 **"Add variant"** 버튼을 찾는다.
 
 ![Create variant space 옵션](images/14.png)
 
-| 옵션 | 용도 |
-|------|------|
-| Translation | GitBook AI가 자동 번역 (번역이 이미 있으면 불필요) |
-| Start with blank | 빈 Space 생성 (직접 Git 연결) |
-| Pick an existing space | 기존 Space 사용 |
+| 옵션                   | 용도                                               |
+| ---------------------- | -------------------------------------------------- |
+| Translation            | GitBook AI가 자동 번역 (번역이 이미 있으면 불필요) |
+| Start with blank       | 빈 Space 생성 (직접 Git 연결)                      |
+| Pick an existing space | 기존 Space 사용                                    |
 
 이미 영어 번역 파일이 있으므로 **"Start with blank"** 를 선택한다.
 
@@ -269,14 +269,14 @@ Content Space 선택 시 드롭다운에서 적절한 Space를 선택한다:
 
 ### GitBook 설정 요약
 
-| 항목 | Korean variant | English variant |
-|------|---------------|----------------|
-| Title | Korean | English |
-| Slug | ko | en |
-| Content Space | Docs | Untitled |
-| Git repo | operator-study | operator-study |
-| Branch | main | main |
-| Project directory | `./ko/` | `./en/` |
+| 항목              | Korean variant | English variant |
+| ----------------- | -------------- | --------------- |
+| Title             | Korean         | English         |
+| Slug              | ko             | en              |
+| Content Space     | Docs           | Untitled        |
+| Git repo          | operator-study | operator-study  |
+| Branch            | main           | main            |
+| Project directory | `./ko/`        | `./en/`         |
 
 ### 독자가 보는 화면
 
